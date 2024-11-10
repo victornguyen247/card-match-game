@@ -6,7 +6,7 @@
     	cards: .word 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8
     	.globl expressions
     	expressions: .space 80	# Reserve space for 16 strings, each with 5 letters
-            #expstring: .asciiz "exp1 exp1 exp2 exp2 exp3 exp3 exp4 exp4 exp5 exp5 exp6 exp6 exp7 exp7 exp8 exp8 "
+                     #expstring "exp1 exp1 exp2 exp2 exp3 exp3 exp4 exp4 exp5 exp5 exp6 exp6 exp7 exp7 exp8 exp8 "
     	expstring_hard: .asciiz " 2-1  1/1 14/7  1*2 12/4  2+1  9-5 16/4  3+2 25/5 36/6  2*3 14/2  3+4  5+3  2*4 " 
     	expstring_easy: .asciiz " A    A    B    B    C    C    D    D    E    E    G    G    M    M    R    R   "      
     	.globl num_matched  	# Make num_matched accessible
