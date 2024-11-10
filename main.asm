@@ -25,7 +25,6 @@ game_loop:
     	jal is_game_over     	# Check if all cards are matched (from game_logic.asm)
     	beq $v0, 1, end_game 	# If game is over, jump to end_game
 
-    	jal display_board    	# Display updated board
     	# Update timer
     	jal updateTimer
     	j game_loop          	# Continue loop
