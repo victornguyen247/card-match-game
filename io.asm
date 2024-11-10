@@ -5,7 +5,8 @@
     	invalidMsg: .asciiz "\nInvalid input. Try again.\n"
     	newline: .asciiz "\n"
     	space: .asciiz "   "
-    	hidden: .asciiz "#"
+	space2: .asciiz " "
+    	hidden: .asciiz "[XXX]"
     	border_line: .asciiz "\n+-------++-------++-------++-------++\n"
     	border1: .asciiz "+-P"        
     	border2: .asciiz "----+"    
@@ -101,32 +102,38 @@ print_card:
     	add $t3, $t3, $s1
     	lb $t4, ($t3)
     
-    	# Print space before card
+    	# If revealed, print number, otherwise print #
+    	beqz $t4, print_hidden
+	# Print space before card
     	la $a0, space
     	li $v0, 4
     	syscall
-    
-    	# If revealed, print number, otherwise print #
-    	beqz $t4, print_hidden
     
     	# Print card value
     	move $a0, $t2
     	li $v0, 1
     	syscall 
-    	j print_space
+	# Print space after card
+    	la $a0, space
+    	li $v0, 4
+    	syscall
+    	j go_next
     
 print_hidden:
+	# Print space2 before hidden
+    	la $a0, space2
+    	li $v0, 4
+    	syscall
 	# print hidden character
     	la $a0, hidden
     	li $v0, 4
     	syscall
-    
-print_space:    
-    	# Print space after card
-    	la $a0, space
+	# Print space2 after hidden
+    	la $a0, space2
     	li $v0, 4
     	syscall
-        
+    
+go_next:            
     	# Print row end
     	la $a0, row_start2
     	li $v0, 4
