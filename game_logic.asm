@@ -7,17 +7,18 @@
     	.globl expressions
     	expressions: .space 80	# Reserve space for 16 strings, each with 5 letters
                      #expstring "exp1 exp1 exp2 exp2 exp3 exp3 exp4 exp4 exp5 exp5 exp6 exp6 exp7 exp7 exp8 exp8 "
-    	expstring_hard: .asciiz " 2-1  1/1 14/7  1*2 12/4  2+1  9-5 16/4  3+2 25/5 36/6  2*3 14/2  3+4  5+3  2*4 " 
+    	expstring_hard: .asciiz " 2*4   8  10*2  20  12*4  48   9*5  45   3*2   6  5*11  55  12*1  12   5*3  15  " 
     	expstring_easy: .asciiz " A    A    B    B    C    C    D    D    E    E    G    G    M    M    R    R   "      
     	.globl num_matched  	# Make num_matched accessible
     	num_matched: .word 0
     	.globl revealed     	# Make revealed accessible to other files
     	revealed: .space 16 	# Array to track revealed cards
-    	prompt:         .asciiz "Select difficulty level (1 for hard, 0 for easy): "
+    	prompt:         .asciiz "Select difficulty level (1 for hard, 0 for easy). Easy: play with letters to practice. Hard: Practice your multiplication skills!"
 	invalid:        .asciiz "Invalid choice, please enter 1 or 0.\n"
 	newline:        .asciiz "\n"
 	hard_version: .asciiz "Hard mode expressions"
 	easy_version: .asciiz "Easy mode expressions"
+	match_message: .asciiz "You got a match!\n"
 
 .text
     	.globl init_board
@@ -221,6 +222,14 @@ check_match:
     	lw $t0, num_matched
     	addi $t0, $t0, 1
     	sw $t0, num_matched
+	
+	# Display board with the correct match
+	jal display_board
+	
+	# Display prompt to show user they got a match
+	la $a0, match_message       # Load address of the prompt string
+	li $v0, 4            # Syscall for print string
+	syscall              # Display prompt
 
     	# Return true (cards match)
     	li $v0, 1
@@ -245,6 +254,9 @@ no_match:
     	add $t2, $t0, $s1
     	sb $zero, ($t1)     	# Hide first card
     	sb $zero, ($t2)     	# Hide second card
+    	
+    	# Display board without showing the incorrect pair
+    	jal display_board
     
     	# Restore $ra
     	lw $ra, 16($sp)
